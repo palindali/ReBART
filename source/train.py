@@ -66,8 +66,8 @@ def get_loss(args, batch, model):
     loss_mask = input_mask[..., :-1].contiguous()
     loss = torch.mul(loss_mask, loss)  # [batch_size, max_length]
     
-    del images, labels, outputs
-    gc.collect()
+    # del images, labels, outputs
+    # gc.collect()
     return loss
 
 def _rotate_checkpoints(args, checkpoint_prefix, use_mtime=False):
