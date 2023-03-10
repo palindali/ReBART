@@ -20,11 +20,10 @@ from torch.utils.data import DataLoader, Dataset, RandomSampler, SequentialSampl
 
 from source.common import init_model, load_data
 
+import gc
 
-try:
-    from torch.utils.tensorboard import SummaryWriter
-except ImportError:
-    from tensorboardX import SummaryWriter
+
+from tensorboardX import SummaryWriter
 
 
 logging.basicConfig(
@@ -66,7 +65,9 @@ def get_loss(args, batch, model):
     # Only consider non padded tokens
     loss_mask = input_mask[..., :-1].contiguous()
     loss = torch.mul(loss_mask, loss)  # [batch_size, max_length]
-
+    
+    del images, labels, outputs
+    gc.collect()
     return loss
 
 def _rotate_checkpoints(args, checkpoint_prefix, use_mtime=False):
